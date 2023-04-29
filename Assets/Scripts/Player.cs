@@ -156,6 +156,7 @@ public class Player : MonoBehaviour
         if(_lives < 1)
         {
             _spawnManager.OnPlayerDeath(); // connecting with SpawnManager script
+            _UIManager.CheckForBestScore();
             Destroy(this.gameObject);
         }
     }

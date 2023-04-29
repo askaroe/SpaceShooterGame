@@ -16,6 +16,10 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _restartText;
 
+    public Text bestText;
+    public int score;
+    public int bestScore;
+
     private GameManager _gameManager;
     // Start is called before the first frame update
     void Start()
@@ -24,6 +28,9 @@ public class UIManager : MonoBehaviour
         _gameOverText.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
 
+        bestScore = PlayerPrefs.GetInt("HighScore", 0);
+        bestText.text = "Best: " + bestScore;
+        
         if(_gameManager == null)
         {
             Debug.LogError("Your gameManager component is NULL");
@@ -37,9 +44,20 @@ public class UIManager : MonoBehaviour
         //_scoreText.text = "Score: " + player.AddingScore();
     }
 
-    public void AddingScoresUI(int score)
+    public void AddingScoresUI(int score_text)
     {
-        _scoreText.text = "Score: " + score.ToString();
+        score = score_text;
+        _scoreText.text = "Score: " + score_text.ToString();
+    }
+
+    public void CheckForBestScore()
+    {
+        if(score > bestScore)
+        {
+            bestScore = score;
+            PlayerPrefs.SetInt("HighScore", bestScore);
+            bestText.text = "Best: " + bestScore.ToString();
+        }
     }
 
     public void UpdateLives(int currentLives)
