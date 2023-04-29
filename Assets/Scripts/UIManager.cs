@@ -70,4 +70,14 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
     }
+
+    public void ResumePlay()
+    {
+        _gameManager.ResumeGame();
+    }
+
+    public void BackToMainMenu()
+    {
+        _gameManager.LoadMainMenu();
+    }
 }

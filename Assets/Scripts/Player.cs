@@ -37,14 +37,16 @@ public class Player : MonoBehaviour
     private AudioClip _laserSoundClip;
     private AudioSource _audioSource;
 
+    private GameManager _gameManager;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>(); // getting acces to a SpawnManager script in the Spawn_Manager object
         _UIManager = GameObject.Find("Canvas").GetComponent<UIManager>(); // getting access to a UI manager from Canvas object
         _audioSource = GetComponent<AudioSource>();
+        _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         if (_spawnManager == null)
         {
             Debug.LogError("Hey! Another developer says that Spawn manager is NULL, it's ok, it is just a message :)");

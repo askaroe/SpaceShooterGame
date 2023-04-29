@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class Main_menu : MonoBehaviour
 {
-    public void LoadGame()
+    public void LoadSinglePLayer()
     {
         SceneManager.LoadScene(1);
     }
