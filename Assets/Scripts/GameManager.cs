@@ -9,6 +9,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject _pauseMenuPanel;
 
+    private Animator _pauseAnimator;
+
+    private void Start()
+    {
+        _pauseAnimator = GameObject.Find("Pause_menu_panel").GetComponent<Animator>();
+        _pauseAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R) && _isGameOver == true)
@@ -22,15 +30,20 @@ public class GameManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.P)){
-            _pauseMenuPanel.SetActive(true);
-            Time.timeScale = 0;
-            
+            pauseMenu();
         }
     }
 
     public void GameOver()
     {
         _isGameOver = true;
+    }
+
+    public void pauseMenu()
+    {
+        _pauseMenuPanel.SetActive(true);
+        _pauseAnimator.SetBool("isPause", true);
+        Time.timeScale = 0;
     }
 
     public void LoadMainMenu()
