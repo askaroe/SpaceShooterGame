@@ -38,6 +38,12 @@ public class Player : MonoBehaviour
     private AudioSource _audioSource;
 
     private GameManager _gameManager;
+    private float _horizontalInput = 0f;
+    private float _verticalInput = 0f;
+
+    private Animator _anim;
+    private enum _movementState { idle, playerTurnRight, playerTurnLeft }
+
 
 
     // Start is called before the first frame update
@@ -46,6 +52,7 @@ public class Player : MonoBehaviour
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>(); // getting acces to a SpawnManager script in the Spawn_Manager object
         _UIManager = GameObject.Find("Canvas").GetComponent<UIManager>(); // getting access to a UI manager from Canvas object
         _audioSource = GetComponent<AudioSource>();
+        _anim = GetComponent<Animator>();
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         if (_spawnManager == null)
         {
@@ -70,6 +77,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         CalculateMovement();
+        UpdateAnimationState();
 
 #if UNITY_ANDROID
             if ((Input.GetKeyDown(KeyCode.Space) || CrossPlatformInputManager.GetButtonDown("Fire")) && Time.time > _canFire) // if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
@@ -88,18 +96,18 @@ public class Player : MonoBehaviour
     {
 
 #if UNITY_ANDROID
-        float horizontalInput = CrossPlatformInputManager.GetAxis("Horizontal"); // Input.GetAxis("Horizontal");
-        float verticalInput = CrossPlatformInputManager.GetAxis("Vertical"); // Input.GetAxis("Vertical");
+        _horizontalInput = CrossPlatformInputManager.GetAxis("Horizontal"); // Input.GetAxis("Horizontal");
+        _verticalInput = CrossPlatformInputManager.GetAxis("Vertical"); // Input.GetAxis("Vertical");
 
 #else
 
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        _horizontalInput = Input.GetAxis("Horizontal");
+        _verticalInput = Input.GetAxis("Vertical");
 
 
 #endif
 
-        Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
+        Vector3 direction = new Vector3(_horizontalInput, _verticalInput, 0);
 
 
         transform.Translate(direction * _speed * Time.deltaTime);
@@ -200,5 +208,25 @@ public class Player : MonoBehaviour
     public int ShowLives()
     {
         return _lives; // for enemy, because I had a problem, when player is dead, one enemy was spawning
+    }
+
+    private void UpdateAnimationState()
+    {
+        _movementState state;
+
+        if(_horizontalInput > 0f)
+        {
+            state = _movementState.playerTurnRight;
+        }
+        else if(_horizontalInput < 0f)
+        {
+            state = _movementState.playerTurnLeft;
+        }
+        else
+        {
+            state = _movementState.idle;
+        }
+
+        _anim.SetInteger("state", (int)state);
     }
 }

@@ -13,8 +13,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        _pauseAnimator = GameObject.Find("Pause_menu_panel").GetComponent<Animator>();
-        _pauseAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+        Scene currentScene = SceneManager.GetActiveScene();
+        int buildIndex = currentScene.buildIndex;
+        if(buildIndex == 1)
+        {
+            _pauseAnimator = GameObject.Find("Pause_menu_panel").GetComponent<Animator>();
+            _pauseAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+        }
     }
 
     private void Update()
